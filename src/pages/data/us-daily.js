@@ -1,75 +1,78 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../../components/layout'
-import { FormatDate, FormatNumber } from '../../components/utils/format'
+// import { FormatDate, FormatNumber } from '../../components/utils/format'
 import { SyncInfobox } from '../../components/common/infobox'
-import Table from '../../components/common/table'
+import TableDev from '../../components/common/table-dev'
 
-const ContentPage = ({ data }) => (
-  <Layout
-    title="US Historical Data"
-    navigation={data.allContentfulNavigationGroup.edges[0].node.pages}
-  >
-    <div
-      className="module-content"
-      dangerouslySetInnerHTML={{
-        __html:
-          data.allContentfulSnippet.edges[0].node
-            .childContentfulSnippetContentTextNode.childMarkdownRemark.html,
-      }}
-    />
+const ContentPage = ({ data }) => {
+  const tableData = React.useMemo(
+    () => data.allCovidUsDaily.edges.map(({ node }) => node),
+    [],
+  )
 
-    <SyncInfobox />
+  const tableColumns = React.useMemo(
+    () => [
+      {
+        Header: 'Date',
+        accessor: 'date',
+      },
+      {
+        Header: 'States Tracked',
+        accessor: 'states',
+      },
+      {
+        Header: 'New Tests',
+        accessor: 'totalTestResultsIncrease',
+      },
+      {
+        Header: 'Positive',
+        accessor: 'positive',
+      },
+      {
+        Header: 'Negative',
+        accessor: 'negative',
+      },
+      // {
+      //   Header: 'Pos + Neg',
+      //   accessor: TODO
+      // },
+      {
+        Header: 'Pending',
+        accessor: 'pending',
+      },
+      {
+        Header: 'Deaths',
+        accessor: 'deaths',
+      },
+      {
+        Header: 'Total Tests',
+        accessor: 'totalTestResults',
+      },
+    ],
+    [],
+  )
 
-    <Table>
-      <caption>US Daily Cumulative Totals - 4 pm ET</caption>
-      <thead>
-        <tr>
-          <th scope="col">Date</th>
-          <th scope="col">States Tracked</th>
-          <th scope="col">New Tests</th>
-          <th scope="col">Positive</th>
-          <th scope="col">Negative</th>
-          <th scope="col">Pos + Neg</th>
-          <th scope="col">Pending</th>
-          <th scope="col">Deaths</th>
-          <th scope="col">Total Tests</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.allCovidUsDaily.edges.map(({ node }) => (
-          <tr>
-            <td>
-              <FormatDate date={node.date} format="ccc LLL d yyyy" />
-            </td>
-            <td>{node.states}</td>
-            <td>
-              <FormatNumber number={node.totalTestResultsIncrease} />
-            </td>
-            <td>
-              <FormatNumber number={node.positive} />
-            </td>
-            <td>
-              <FormatNumber number={node.negative} />
-            </td>
-            <td>
-              <FormatNumber number={node.positive + node.negative} />
-            </td>
-            <td>
-              <FormatNumber number={node.pending} />
-            </td>
-            <td>
-              <FormatNumber number={node.death} />
-            </td>
-            <td>
-              <FormatNumber number={node.totalTestResults} />
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  </Layout>
-)
+  return (
+    <Layout
+      title="US Historical Data"
+      navigation={data.allContentfulNavigationGroup.edges[0].node.pages}
+    >
+      <div
+        className="module-content"
+        dangerouslySetInnerHTML={{
+          __html:
+            data.allContentfulSnippet.edges[0].node
+              .childContentfulSnippetContentTextNode.childMarkdownRemark.html,
+        }}
+      />
+
+      <SyncInfobox />
+
+      <TableDev data={tableData} columns={tableColumns} />
+    </Layout>
+  )
+}
 
 export default ContentPage
 

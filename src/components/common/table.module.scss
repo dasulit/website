@@ -1,3 +1,5 @@
+@import '../../scss/colors.module.scss';
+
 .table {
   line-height: 1rem;
   border-collapse: collapse;
@@ -17,53 +19,57 @@
     text-align: left;
   }
 
-  td,
-  th[scope='col'] {
+  colgroup:not(:first-child) {
+    border-left: 1px solid $color-slate-300;
+  }
+
+  td {
     text-align: right;
+    padding: 0.5rem;
   }
 
   caption {
     font-weight: bold;
     font-size: 1.25rem;
-    padding: 0.75rem 0;
-  }
-
-  th,
-  td {
-    border: 1px solid #c0c0c0;
-    padding: 0.25rem;
-  }
-
-  th:last-child {
-    padding-right: 0.25rem;
+    margin-bottom: 1rem;
   }
 
   th {
-    background: #dee2e4;
-
     span {
       display: block;
       font-size: 0.75rem;
     }
 
+    &[scope='col'] {
+      text-align: right;
+    }
+
     &[scope='colgroup'] {
-      font-size: 1.1em;
-      text-align: center;
+      font-size: 1.25em;
+      padding: 0 0.5rem;
     }
   }
 
-  thead th {
-    vertical-align: bottom;
+  thead {
+    border-bottom: 1px solid $color-slate-400;
+
+    th {
+      padding: 0 0.5rem 0.5rem;
+      vertical-align: bottom;
+    }
   }
 
   tbody {
     th {
-      background: #f3f3f3;
       font-weight: normal;
     }
 
-    tr:first-child > * {
-      border-top: none;
+    tr {
+      border-bottom: 1px solid $color-slate-200;
+    }
+
+    td ul {
+      margin: 0;
     }
   }
 }
